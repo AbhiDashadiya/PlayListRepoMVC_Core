@@ -16,6 +16,15 @@ namespace LearnASPCoreMVC.Controllers
             _context = context;
         }
 
+
+        private bool StudentExists(int id)
+        {
+            return (_context.Students?.Any(e => e.StudentID == id)).GetValueOrDefault();
+        }
+
+
+        #region Get Methods
+
         // GET: Student
         public async Task<IActionResult> Index()
         {
@@ -55,22 +64,6 @@ namespace LearnASPCoreMVC.Controllers
             return View(vm);
         }
 
-        // POST: Student/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentID,Name,Enrolled")] Student student)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(student);
-        }
-
         // GET: Student/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -87,9 +80,55 @@ namespace LearnASPCoreMVC.Controllers
             return View(student);
         }
 
+        // GET: Student/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Students == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.Students
+                .FirstOrDefaultAsync(m => m.StudentID == id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            return View(student);
+        }
+
+        #endregion
+
+        #region Post Methods
+
+        // POST: Student/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateStudentViewModel model)
+        {
+            Student student = new Student()
+            {
+                Name = model.Name,
+                Enrolled = model.Enrolled,
+            };
+
+            var selectedCourses = model.Courses.Where(x => x.Selected == true).Select(x => Convert.ToInt32(x.Value)).ToList();
+
+            foreach (var item in selectedCourses)
+            {
+                student.EnrolledCourses.Add(new StudentCourse() { CourseID = item });
+            }
+
+            _context.Students.Add(student);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+
+
         // POST: Student/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StudentID,Name,Enrolled")] Student student)
@@ -122,23 +161,7 @@ namespace LearnASPCoreMVC.Controllers
             return View(student);
         }
 
-        // GET: Student/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Students == null)
-            {
-                return NotFound();
-            }
 
-            var student = await _context.Students
-                .FirstOrDefaultAsync(m => m.StudentID == id);
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            return View(student);
-        }
 
         // POST: Student/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -159,9 +182,8 @@ namespace LearnASPCoreMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentExists(int id)
-        {
-            return (_context.Students?.Any(e => e.StudentID == id)).GetValueOrDefault();
-        }
+        #endregion
+
+
     }
 }
