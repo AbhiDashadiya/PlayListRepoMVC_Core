@@ -16,6 +16,14 @@ namespace LearnASPCoreMVC.Data
 
 		public DbSet<StudentCourse> StudentCourses { get; set; }
 
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Course>().ToTable("Course_Table");
+			modelBuilder.Entity<Student>().ToTable("Student_Table");
+			modelBuilder.Entity<StudentCourse>().ToTable("StudentCourse_Table");
+
+		}
+
 
 	}
 }
