@@ -24,6 +24,23 @@
         </dd>
     </dl>
 </div>
+
+<div>
+    Courses :
+    @if(Model.EnrolledCourses.Count == 0)
+    {
+        <span>Not enrolled in any!</span>
+    }
+    else
+        @foreach (var item in Model.EnrolledCourses)
+        {
+            <span>
+                @item.Course.Title
+            </span>
+        }
+    
+</div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.StudentID">Edit</a> |
     <a asp-action="Index">Back to List</a>

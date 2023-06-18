@@ -42,6 +42,8 @@ namespace LearnASPCoreMVC.Controllers
             }
 
             var student = await _context.Students
+                .Include(e => e.EnrolledCourses)
+                .ThenInclude(x => x.Course)
                 .FirstOrDefaultAsync(m => m.StudentID == id);
             if (student == null)
             {
@@ -113,7 +115,7 @@ namespace LearnASPCoreMVC.Controllers
                 Enrolled = model.Enrolled,
             };
 
-            var selectedCourses = model.Courses.Where(x => x.Selected == true).Select(x => Convert.ToInt32(x.Value)).ToList();
+            var selectedCourses = model.Courses.Where(x => x.Selected).Select(x => Convert.ToInt32(x.Value)).ToList();
 
             foreach (var item in selectedCourses)
             {
