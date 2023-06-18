@@ -74,12 +74,27 @@ namespace LearnASPCoreMVC.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
+            var student = await _context.Students.Include(x => x.EnrolledCourses).FirstOrDefaultAsync(x => x.StudentID == id);
             if (student == null)
             {
                 return NotFound();
             }
-            return View(student);
+            var selectedID = student.EnrolledCourses.Select(x => x.CourseID).ToList();
+            var items = _context.Courses.Select(x => new SelectListItem
+            {
+                Text = x.Title,
+                Value = x.CourseID.ToString(),
+                Selected = selectedID.Contains(x.CourseID)
+            }).ToList();
+
+            CreateStudentViewModel model = new CreateStudentViewModel();
+            model.StudentID = student.StudentID;
+            model.Name = student.Name;
+            model.Enrolled = student.Enrolled;
+            model.Courses = items;
+
+
+            return View(model);
         }
 
         // GET: Student/Delete/5
