@@ -1,6 +1,7 @@
 ﻿using LearnASPCoreMVC.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using LearnASPCoreMVC.ViewModel;
 
 namespace LearnASPCoreMVC.Data
 {
@@ -27,6 +28,8 @@ namespace LearnASPCoreMVC.Data
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<LearnASPCoreMVC.ViewModel.RoleStore> RoleStore { get; set; } = default!;
 
 
     }
