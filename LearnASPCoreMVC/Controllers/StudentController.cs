@@ -1,12 +1,14 @@
 ﻿using LearnASPCoreMVC.Data;
 using LearnASPCoreMVC.Models;
 using LearnASPCoreMVC.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearnASPCoreMVC.Controllers
 {
+    [Authorize(Roles = "Student")]
     public class StudentController : Controller
     {
         private readonly DataContext _context;
