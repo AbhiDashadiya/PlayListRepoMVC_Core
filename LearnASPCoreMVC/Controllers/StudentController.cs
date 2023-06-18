@@ -144,38 +144,43 @@ namespace LearnASPCoreMVC.Controllers
         }
 
 
-
         // POST: Student/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentID,Name,Enrolled")] Student student)
+        public async Task<IActionResult> Edit(CreateStudentViewModel model)
         {
-            if (id != student.StudentID)
+            // finding student
+            Student existingStudent = _context.Students.Find(model.StudentID);
+
+
+            // update name and enrollment data
+            existingStudent.Name = model.Name;
+            existingStudent.Enrolled = model.Enrolled;
+
+            // find the student from student course table and find the course id's 
+            var studentFromStudentCourseTable = _context.Students.Include(x => x.EnrolledCourses).FirstOrDefault(x => x.StudentID == model.StudentID);
+
+            // find the existing course ids
+            var existingCourse = studentFromStudentCourseTable.EnrolledCourses.Select(x => x.CourseID).ToList();
+            // new ids which are select in model
+            var newIdFromModel = model.Courses.Where(x => x.Selected).Select(x => int.Parse(x.Value)).ToList();
+
+            // now find which id's to add
+            var toAdd = newIdFromModel.Except(existingCourse).ToList();
+            var toRemove = existingCourse.Except(newIdFromModel).ToList();
+
+            existingStudent.EnrolledCourses = existingStudent.EnrolledCourses.Where(x => !toRemove.Contains(x.CourseID)).ToList();
+
+            foreach (var item in toAdd)
             {
-                return NotFound();
+                existingStudent.EnrolledCourses.Add(new StudentCourse()
+                {
+                    CourseID = item
+                });
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(student);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StudentExists(student.StudentID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(student);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
 
