@@ -1,14 +1,13 @@
 ﻿using LearnASPCoreMVC.Data;
 using LearnASPCoreMVC.Models;
 using LearnASPCoreMVC.ViewModel;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearnASPCoreMVC.Controllers
 {
-    [Authorize(Roles = "Student,Admin")]
+    //[Authorize(Roles = "Student,Admin")]
     public class StudentController : Controller
     {
         private readonly DataContext _context;
@@ -28,6 +27,8 @@ namespace LearnASPCoreMVC.Controllers
         #region Get Methods
 
         // GET: Student
+        [Route("Student")]
+        [Route("Student/Index")]
         public async Task<IActionResult> Index()
         {
             return _context.Students != null ?
@@ -35,7 +36,9 @@ namespace LearnASPCoreMVC.Controllers
                         Problem("Entity set 'DataContext.Students'  is null.");
         }
 
+
         // GET: Student/Details/5
+        [Route("Student/Details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Students == null)
@@ -56,6 +59,7 @@ namespace LearnASPCoreMVC.Controllers
         }
 
         // GET: Student/Create
+        [Route("Student/Create")]
         public IActionResult Create()
         {
             var courses = _context.Courses.Select(x => new SelectListItem
@@ -69,6 +73,7 @@ namespace LearnASPCoreMVC.Controllers
         }
 
         // GET: Student/Edit/5
+        [Route("Student/Edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Students == null)
@@ -100,6 +105,7 @@ namespace LearnASPCoreMVC.Controllers
         }
 
         // GET: Student/Delete/5
+        [Route("Student/Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Students == null)

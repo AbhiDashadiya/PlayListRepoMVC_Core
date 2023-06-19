@@ -1,12 +1,12 @@
 ﻿using LearnASPCoreMVC.Data;
 using LearnASPCoreMVC.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearnASPCoreMVC.Controllers
 {
 
-    [Authorize(Roles = "Student,Admin")]
+    //[Authorize(Roles = "Student,Admin")]
+    [Route("[controller]")]
     public class CourseController : Controller
     {
         private readonly DataContext _dataContext;
@@ -24,6 +24,10 @@ namespace LearnASPCoreMVC.Controllers
         /// <returns></returns>
         #region HttpGet
 
+
+        //[Route("Course")]
+        //[Route("Course/Index")]
+        [Route("[action]")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -31,19 +35,25 @@ namespace LearnASPCoreMVC.Controllers
             return View(courses);
         }
 
+        //[Route("Course/Create")]
+        [Route("[action]")]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
+        //[Route("Course/Details/{id}")]
         [HttpGet]
+        [Route("[action]")]
         public IActionResult Details(int id)
         {
             var data = _dataContext.Courses.FirstOrDefault(x => x.CourseID == id);
             return View(data);
         }
 
+        //[Route("Course/Edit/{id}")]
+        [Route("[action]/{id}")]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -51,6 +61,10 @@ namespace LearnASPCoreMVC.Controllers
             return View(data);
         }
 
+
+
+        //[Route("Course/Delete/{id}")]
+        [Route("[action]/{id}")]
         public IActionResult Delete(int id)
         {
             var data = _dataContext.Courses.FirstOrDefault(x => x.CourseID == id);

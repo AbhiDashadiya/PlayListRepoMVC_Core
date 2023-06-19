@@ -13,6 +13,8 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
+builder.Services.AddMvc(ope => ope.EnableEndpointRouting = true);
+
 builder.Services
     .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
