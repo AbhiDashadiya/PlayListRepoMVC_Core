@@ -49,6 +49,9 @@ namespace LearnASPCoreMVC.Controllers
         public IActionResult Details(int id)
         {
             var data = _dataContext.Courses.FirstOrDefault(x => x.CourseID == id);
+
+            //ViewBag.Course = data;
+
             return View(data);
         }
 
