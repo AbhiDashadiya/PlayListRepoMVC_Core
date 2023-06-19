@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LearnASPCoreMVC.Controllers
 {
-    [Authorize(Roles = "Student")]
+    [Authorize(Roles = "Student,Admin")]
     public class StudentController : Controller
     {
         private readonly DataContext _context;
