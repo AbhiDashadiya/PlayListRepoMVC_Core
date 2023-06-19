@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1> Test Page for Query</h1>
+
+
+<div>
+
+    <form asp-controller="Query" asp-action="ShowData">
+        <input type="text" name="first" />
+        <button type="submit" value="Submit">Submit</button>
+
+    </form>
+
+
+    <br>
+    <br>
+
+    <a asp-controller="Query" asp-action="ShowData" asp-route-first="hehe_i_am_string"> click me</a>
+
+
+</div>
+
