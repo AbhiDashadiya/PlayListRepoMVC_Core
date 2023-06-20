@@ -31,6 +31,8 @@ namespace LearnASPCoreMVC.Data
 
         public DbSet<LearnASPCoreMVC.ViewModel.RoleStore> RoleStore { get; set; } = default!;
 
+        public DbSet<LearnASPCoreMVC.ViewModel.AppUserViewModel> AppUserViewModel { get; set; } = default!;
+
 
     }
 }

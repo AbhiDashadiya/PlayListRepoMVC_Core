@@ -16,9 +16,9 @@ namespace LearnASPCoreMVC.Controllers
             _roleManager = roleManager;
         }
 
-        [Route("")]
-        [Route("Home")]
-        [Route("Home/Index")]
+        //[Route("")]
+        //[Route("Home")]
+        //[Route("Home/Index")]
         public IActionResult Index()
         {
             return View();

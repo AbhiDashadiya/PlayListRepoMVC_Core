@@ -9,5 +9,18 @@ namespace LearnASPCoreMVC.Models
         public string LastName { get; set; }
 
         public string Address { get; set; }
+
+        public Gender Gender { get; set; }
     }
+
+    public enum Gender
+    {
+        Male,
+        Female,
+        Lesbian,
+        Gay,
+        Bisexual,
+        Transgender
+    }
+
 }

@@ -6,7 +6,7 @@ namespace LearnASPCoreMVC.Controllers
 {
 
     //[Authorize(Roles = "Student,Admin")]
-    [Route("[controller]")]
+    //[Route("[controller]")]
     public class CourseController : Controller
     {
         private readonly DataContext _dataContext;
@@ -27,16 +27,30 @@ namespace LearnASPCoreMVC.Controllers
 
         //[Route("Course")]
         //[Route("Course/Index")]
-        [Route("[action]")]
+        //[Route("[action]")]
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string sortOrder)
         {
+            ViewData["SortTitle"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+
             var courses = _dataContext.Courses.ToList();
+
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    courses = courses.OrderByDescending(x => x.Title).ToList();
+                    break;
+                default:
+                    courses = courses.OrderBy(x => x.Title).ToList();
+                    break;
+            }
+
+            //var courses = _dataContext.Courses.ToList();
             return View(courses);
         }
 
         //[Route("Course/Create")]
-        [Route("[action]")]
+        //[Route("[action]")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -45,7 +59,7 @@ namespace LearnASPCoreMVC.Controllers
 
         //[Route("Course/Details/{id}")]
         [HttpGet]
-        [Route("[action]")]
+        //[Route("[action]")]
         public IActionResult Details(int id)
         {
             var data = _dataContext.Courses.FirstOrDefault(x => x.CourseID == id);
@@ -56,7 +70,7 @@ namespace LearnASPCoreMVC.Controllers
         }
 
         //[Route("Course/Edit/{id}")]
-        [Route("[action]/{id}")]
+        //[Route("[action]/{id}")]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -67,7 +81,7 @@ namespace LearnASPCoreMVC.Controllers
 
 
         //[Route("Course/Delete/{id}")]
-        [Route("[action]/{id}")]
+        //[Route("[action]/{id}")]
         public IActionResult Delete(int id)
         {
             var data = _dataContext.Courses.FirstOrDefault(x => x.CourseID == id);
@@ -84,6 +98,7 @@ namespace LearnASPCoreMVC.Controllers
         /// <returns></returns>
         #region HttpPost
 
+        //[Route("[action]")]
         [HttpPost]
         public IActionResult Create(Course model)
         {
@@ -92,6 +107,7 @@ namespace LearnASPCoreMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        //[Route("[action]")]
         [HttpPost]
         public IActionResult Edit(Course model)
         {
@@ -100,6 +116,7 @@ namespace LearnASPCoreMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        //[Route("[action]")]
         [HttpPost]
         public IActionResult Delete(Course model)
         {
